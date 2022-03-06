@@ -3,10 +3,6 @@ import pandas as pd
 import plotly.graph_objects as go
 
 
-import matplotlib.pyplot as plt
-plt.rcParams["font.family"] = "sans-serif"
-plt.rcParams["font.sans-serif"] = "Source Sans Pro"
-
 st.title('Données du Cimetière du Dieweg')
 
 EXCEL_URL = ('./_cu.xlsx')
@@ -33,18 +29,16 @@ def load_data():
 def generate_section_graph(data):
     section_data = data["section"]
     section_counted = section_data.value_counts(dropna=False)
-    fig1, ax1 = plt.subplots()
-    ax1.pie(section_counted, startangle=20, autopct='%1.3f%%', labels=["Section " + s.upper() for s in section_counted.index.tolist()])
-    ax1.axis('equal')  
-    return fig1
+    fig = go.Figure(data=[go.Pie(labels=["Section " + s.upper() for s in section_counted.index.tolist()], values=section_counted)])
+    fig.update_layout(margin=dict(pad=0, l=0, r=0, b=0, t=0))
+    return fig
 
 def generate_gender_graph(data):
     women_data = data["femme"]
     women_counted = women_data.value_counts(dropna=False)
-    fig1, ax1 = plt.subplots()
-    ax1.pie(women_counted, startangle=20, autopct='%1.1f%%', labels=["Hommes", "Femmes"])
-    ax1.axis('equal')
-    return fig1
+    fig = go.Figure(data=[go.Pie(labels=["Hommes", "Femmes"], values=women_counted)])
+    fig.update_layout(margin=dict(pad=0, l=0, r=0, b=0, t=0))
+    return fig
 
 def generate_age_graph(data):
     st.subheader("Âge de mort par genre")
@@ -59,7 +53,8 @@ def generate_age_graph(data):
         y = women_available_data.value_counts(dropna=False, sort=False).sort_index(), name="Women"))
     line_chart.add_trace(go.Scatter(x = [x for x in range(min(available_data), max(available_data)+1)],
         y = men_available_data.value_counts(dropna=False, sort=False).sort_index(), name="Men"))
-    st.plotly_chart(line_chart)
+    line_chart.update_layout(margin=dict(pad=0, l=0, r=0, b=0, t=10))
+    return line_chart
 
 def generate_stats(data):
     st.subheader("Statistiques générales")
@@ -79,11 +74,11 @@ def display(data):
 
     col1, col2 = st.columns(2)
     col1.subheader('Tombes par section')
-    col1.pyplot(generate_section_graph(data))
+    col1.plotly_chart(generate_section_graph(data), use_container_width=True)
     col2.subheader('Répartition par genre')
-    col2.pyplot(generate_gender_graph(data))
+    col2.plotly_chart(generate_gender_graph(data), use_container_width=True)
 
-    generate_age_graph(data)
+    st.plotly_chart(generate_age_graph(data))
 
 data = init()
 display(data)
