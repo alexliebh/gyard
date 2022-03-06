@@ -3,7 +3,7 @@ import numpy as np
 
 DATA_URL = ('./data.xlsx')
 DATE_COLUMN = "décès"
-BOOL_COLS = ["texte", "allemand", "hollandais", "reliquat", 
+BOOL_COLS = ["pays de l'est", "autres pays", "texte", "allemand", "hollandais", "reliquat", 
 "alsacien-lorrain", "identitaire", "france", "élaborée", "belges", 
 "citation", "épitaphe", "anglais", "translaté", "séputmult", "homme", "femme",
 "dix neuf", "vingt", "enfant", "mort né"]
